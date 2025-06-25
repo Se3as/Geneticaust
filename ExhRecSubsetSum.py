@@ -10,15 +10,16 @@ def isExhRecSubsetSum(set, element, sum):
     return False
   
   if (set[element - 1] > sum):
-     return isExhRecSubsetSum(set, element - 1, sum)
+    return isExhRecSubsetSum(set, element - 1, sum)
   
-  return isExhRecSubsetSum(
-      set, element - 1, sum) or isExhRecSubsetSum(
-      set, element -1, sum - set[element - 1])
+  if (set[element - 1] <= sum):
+    # include the last element in the subset
+    # or exclude the last element in the subset
+    return (isExhRecSubsetSum(set, element - 1, sum) or 
+            isExhRecSubsetSum(set, element - 1, sum - set[element - 1]))
 
 def exhRecSubsetSum(set, element, sum):
   return isExhRecSubsetSum(set, element, sum)
-
 
 if __name__ == '__main__':
   # example of a list
