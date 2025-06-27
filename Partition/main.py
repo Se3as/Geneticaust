@@ -20,25 +20,19 @@ def run_test(
     method_test: Any, 
     name: str, 
     total_sum: List[int], 
-    num_runs: int, 
     logger: Log
 ):
     count: int = len(total_sum)  
-    if "WorstCase" in name:
-        num_runs: int = 1
-    for _ in range(num_runs):
-        start_time: float = time.perf_counter()  
-        method_test.solve(total_sum)
-        end_time: float = time.perf_counter()  
-        duration: float = (end_time - start_time) * 1000000  
-        logger.add(name, duration, count, sum(total_sum))
+    start_time: float = time.perf_counter()  
+    method_test.solve(total_sum)
+    end_time: float = time.perf_counter()  
+    duration: float = (end_time - start_time) * 1000000  
+    logger.add(name, duration, count, sum(total_sum))
 
 def main():
     random.seed(777)
     N_ELEMENTS_WORSE: int = 26  
-    NUM_RUNS: int = 2  
-    NUM_RUNS_PER_LIST: int = 10  
-    N_ELEMENTS_MEDIUM: int = 30  
+    N_ELEMENTS_MEDIUM: int = 40  
     logger: Log = Log("partition.csv")  
     
     methods: List[tuple] = [
@@ -47,26 +41,27 @@ def main():
     ]  
 
     worst_case_list: List[int] = generate_worst_case_list(N_ELEMENTS_WORSE)  
+    medium_case_list_og: List[int] = generate_medium_case_list(N_ELEMENTS_MEDIUM)  
+    medium_case_list: List[int] = []
+    
     
     for method, name in methods:
         run_test(
             method_test=method,
             name=f"{name}_WorstCase",
             total_sum=worst_case_list,
-            num_runs=NUM_RUNS_PER_LIST,
             logger=logger
         )
-    for i in range(NUM_RUNS):
-        medium_case_list: List[int] = generate_medium_case_list(N_ELEMENTS_MEDIUM)  
-        for method, name in methods:
-            run_test(
-                method_test=method,
-                name=f"{name}_MediumCase",
-                total_sum=medium_case_list,
-                num_runs=NUM_RUNS_PER_LIST,
-                logger=logger
-            )
-        random.seed(778+i)
+    for i in range((len(medium_case_list_og))):
+        medium_case_list.append(medium_case_list_og[i])
+        if sum(medium_case_list) % 2 == 0:
+            for method, name in methods:
+                run_test(
+                    method_test=method,
+                    name=f"{name}_MediumCase",
+                    total_sum=medium_case_list,
+                    logger=logger
+                )
 
     logger.save()
 
