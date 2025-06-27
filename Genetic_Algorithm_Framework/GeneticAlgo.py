@@ -79,26 +79,26 @@ class GeneticAlgorithm:
             
     def crossover_one_point(self, p1: List[int], p2: List[int]) -> CrossoverResult:
         point: int = random.randint(1, len(p1) - 2)
-        c1: List[int] = p1[:point] + p2[point:]
-        c2: List[int] = p2[:point] + p1[point:]
-        return self.CrossoverResult(c1, c2)
+        child1: List[int] = p1[:point] + p2[point:]
+        child2: List[int] = p2[:point] + p1[point:]
+        return self.CrossoverResult(child1, child2)
 
     def crossover_two_point(self, p1: List[int], p2: List[int]) -> CrossoverResult:
-        pA: int = random.randint(1, len(p1) - 2)
-        pB: int = random.randint(1, len(p1) - 2)
-        if pA > pB:
-            pA, pB = pB, pA
-        c1: List[int] = p1[:pA] + p2[pA:pB] + p1[pB:]
-        c2: List[int] = p2[:pA] + p1[pA:pB] + p2[pB:]
-        return self.CrossoverResult(c1, c2)
+        point_A: int = random.randint(1, len(p1) - 2)
+        point_B: int = random.randint(1, len(p1) - 2)
+        if point_A > point_B:
+            point_A, point_B = point_B, point_A
+        child1: List[int] = p1[:point_A] + p2[point_A:point_B] + p1[point_B:]
+        child2: List[int] = p2[:point_A] + p1[point_A:point_B] + p2[point_B:]
+        return self.CrossoverResult(child1, child2)
         
     def crossover_uniform(self, p1: List[int], p2: List[int]) -> CrossoverResult:
-        c1: List[int] = list(p1)
-        c2: List[int] = list(p2)
-        for i in range(len(c1)):
+        child1: List[int] = list(p1)
+        child2: List[int] = list(p2)
+        for i in range(len(child1)):
             if random.random() < 0.5:
-                c1[i], c2[i] = c2[i], c1[i]
-        return self.CrossoverResult(c1, c2)
+                child1[i], child2[i] = child2[i], child1[i]
+        return self.CrossoverResult(child1, child2)
 
     def mutate(self, chromo: List[int]):
         if random.random() > self.params.mutation_prob:
@@ -127,22 +127,22 @@ class GeneticAlgorithm:
         self.generation = 0
         for _ in range(self.params.max_generations):
             self.generation += 1
-            new_pop: List['Individual'] = []
-            elite_count: int = int(self.params.pop_size * self.params.elitism_fraction)
-            elites: List['Individual'] = self.population[-elite_count:]
-            new_pop.extend(elites)
-            while len(new_pop) < self.params.pop_size:
+            next_gen: List['Individual'] = []
+            elite_size: int = int(self.params.pop_size * self.params.elitism)
+            elites: List['Individual'] = self.population[-elite_size:]
+            next_gen.extend(elites)
+            while len(next_gen) < self.params.pop_size:
                 p1: 'Individual' = self.select_parent()
                 p2: 'Individual' = self.select_parent()
                 children = self.crossover(p1.chromosome, p2.chromosome)
-                c1_chromo: List[int] = children.child1
-                c2_chromo: List[int] = children.child2
-                self.mutate(c1_chromo)
-                self.mutate(c2_chromo)
-                new_pop.append(Individual(chromosome=c1_chromo))
-                if len(new_pop) < self.params.pop_size:
-                    new_pop.append(Individual(chromosome=c2_chromo))
-            self.population = new_pop
+                child1_chromo: List[int] = children.child1
+                child2_chromo: List[int] = children.child2
+                self.mutate(child1_chromo)
+                self.mutate(child2_chromo)
+                next_gen.append(Individual(chromosome=child1_chromo))
+                if len(next_gen) < self.params.pop_size:
+                    next_gen.append(Individual(chromosome=child2_chromo))
+            self.population = next_gen
             self.evaluate_population()
             current_best: 'Individual' = self.population[-1]
             if self.best is None or current_best.fitness > self.best.fitness:

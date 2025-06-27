@@ -30,7 +30,7 @@ class Individual:
 class GAParams:
     def __init__(self, pop_size: int = 100, init_method: int = GAConstants.RANDOM_INIT, selection_method: int = GAConstants.TOURNAMENT_SELECTION,
         tournament_size: int = 5, crossover_prob: float = 0.85, crossover_type: int = GAConstants.UNIFORM_CROSSOVER, mutation_prob: float = 0.05,
-        gene_mutation_prob: float = 0.1, mutation_type: int = GAConstants.BIT_FLIP_MUTATION, elitism_fraction: float = 0.1, max_generations: int = 1000,
+        gene_mutation_prob: float = 0.1, mutation_type: int = GAConstants.BIT_FLIP_MUTATION, elitism: float = 0.1, max_generations: int = 1000,
         patience: int = 50):
         self.pop_size = pop_size
         self.init_method = init_method
@@ -41,6 +41,6 @@ class GAParams:
         self.mutation_prob = mutation_prob
         self.gene_mutation_prob = gene_mutation_prob
         self.mutation_type = mutation_type
-        self.elitism_fraction = elitism_fraction
+        self.elitism = elitism
         self.max_generations = max_generations
         self.patience = patience
