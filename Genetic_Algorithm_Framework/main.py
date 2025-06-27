@@ -1,31 +1,44 @@
 from typing import List
+import random
 from Common import GAParams, GAConstants  
-from GeneticAlgo import GeneticAlgorithm
 from Problem import PartitionProblem  
+from Controller import Controller
 
+def generate_medium_case_list(n: int, max_value: int = 100) -> List[int]:
+    medium_list: List[int] = [random.randint(1, max_value) for _ in range(n)]  
+    if sum(medium_list) % 2 != 0:
+        medium_list[-1] += 1
+    return medium_list
 
 if __name__ == "__main__":
-
-    numbers: List[int] = [24, 40, 22, 42, 7, 4, 2, 9] 
-
-    partition_problem = PartitionProblem(numbers)
-
-    ga_params = GAParams(
-    pop_size=500,                  
-    init_method=GAConstants.RANDOM_INIT,
-    selection_method=GAConstants.TOURNAMENT_SELECTION,
-    tournament_size=5,
-    crossover_prob=0.9,
-    crossover_type=GAConstants.UNIFORM_CROSSOVER,
-    mutation_prob=0.25,                
-    gene_mutation_prob=0.1,            
-    mutation_type=GAConstants.BIT_FLIP_MUTATION,
-    elitism=0.05,             
-    max_generations=500,             
-    patience=50                      
+    random.seed(777)
+    numbers_og: List[int] = generate_medium_case_numbers(1000)
+    numbers_run: List[int] = []
+    ga_common_params = GAParams(
+        pop_size=150, 
+        init_method=GAConstants.RANDOM_INIT,
+        selection_method=GAConstants.TOURNAMENT_SELECTION, 
+        tournament_size=5,
+        crossover_prob=0.9, 
+        mutation_prob=0.1, 
+        max_generations=120, 
+        patience=25
     )
-    genetic_algorithm = GeneticAlgorithm(partition_problem, ga_params)
-    best_solution = genetic_algorithm.run()
-    print("\nTermino en " + str(genetic_algorithm.generation) + " generaciones.")
-    print("Fitness : " + str(round(best_solution.fitness, 2)))
+    reps = 1
+    controller = Controller(
+        ga_common_params,
+        reps
+    )
 
+    for i in range(len(numbers_og)):
+        numbers_run.append(numbers_og[i])
+        if sum(numbers_run) % 2 == 0:
+            controller.add_experiment(
+                PartitionProblem,
+                problem_args={
+                    'numbers': numbers_run.copy(),
+                    'Size': len(numbers_run) 
+                },
+                log_file="Partition_GA.csv"
+            )
+    controller.run() 

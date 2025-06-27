@@ -44,3 +44,33 @@ class GAParams:
         self.elitism = elitism
         self.max_generations = max_generations
         self.patience = patience
+
+def get_init_method(init_method: int) -> str:
+    if init_method == GAConstants.HEURISTIC_INIT:
+        return "Heuristic"
+    return "Random"
+
+def get_selection(selection_method: int) -> str:
+    if selection_method == GAConstants.ROULETTE_SELECTION:
+        return "Roulette"
+    if selection_method == GAConstants.RANKING_SELECTION:
+        return "Ranking"
+    if selection_method == GAConstants.TOURNAMENT_SELECTION:
+        return "Tournament"
+    return "Unknown"
+
+def get_crossover(crossover_type: int) -> str:
+    if crossover_type == GAConstants.ONE_POINT_CROSSOVER:
+        return "1-Point"
+    if crossover_type == GAConstants.TWO_POINT_CROSSOVER:
+        return "2-Point"
+    if crossover_type == GAConstants.UNIFORM_CROSSOVER:
+        return "Uniform"
+    return "Unknown"
+
+def get_mutation(mutation_type: int) -> str:
+    if mutation_type == GAConstants.SWAP_MUTATION:
+        return "Swap"
+    if mutation_type == GAConstants.BIT_FLIP_MUTATION:
+        return "Bit-Flip"
+    return "Unknown"

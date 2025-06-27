@@ -20,6 +20,7 @@ class GeneticAlgorithm:
         self.best: 'Individual' = None
         self.no_improvement: int = 0
         self.generation: int = 0
+        self.stop_reason: str = "No_Run"
 
     def initialize_population(self):
         self.population: List['Individual'] = []
@@ -125,6 +126,7 @@ class GeneticAlgorithm:
         self.best = self.population[-1]
         self.no_improvement = 0
         self.generation = 0
+        self.stop_reason: str = "Max_Gen"
         for _ in range(self.params.max_generations):
             self.generation += 1
             next_gen: List['Individual'] = []
@@ -151,5 +153,6 @@ class GeneticAlgorithm:
             else:
                 self.no_improvement += 1
             if self.no_improvement >= self.params.patience:
+                self.stop_reason = "Patience"
                 break
         return self.best

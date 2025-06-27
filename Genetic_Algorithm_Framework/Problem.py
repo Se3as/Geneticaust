@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, Any, List
 import random
 
 class Problem:
@@ -8,6 +8,8 @@ class Problem:
     def random_ind(self) -> List[int]:
         pass
     def heuristic_ind(self) -> List[int]:
+        pass
+    def get_mets(self, chromosome: List[int]) -> Dict[str, Any]:
         pass
 
 class PartitionProblem(Problem):
@@ -28,3 +30,13 @@ class PartitionProblem(Problem):
 
     def heuristic_ind(self) -> List[int]:
         pass
+
+    def get_mets(self, chromosome: List[int]) -> Dict[str, Any]:
+        sum1 = sum(self.numbers[i] for i, gene in enumerate(chromosome) if gene == 1)
+        sum2 = self.total_sum - sum1
+        difference = abs(sum1 - sum2)
+        return {
+            "Partition1_Sum": sum1,
+            "Partition2_Sum": sum2,
+            "Partition_Difference": difference
+        }
