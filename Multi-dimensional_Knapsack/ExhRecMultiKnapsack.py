@@ -44,4 +44,4 @@ if __name__ == "__main__":
   capacity_v = 10
 
   result = ExhRecMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v)
-  print("Best result:", result)
+  print("Best price:", result)

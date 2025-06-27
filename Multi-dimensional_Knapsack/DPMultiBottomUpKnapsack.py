@@ -1,9 +1,10 @@
-
+# This implementation is bottom-up dp
 def DPMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v):
   elements = len(items)
+  # Create a 2d matrix to store the maximum price and initialize it to 0
+  # dp[w][v] will hold the maximum price for weight w and volume v
   dp = [[0] * (capacity_v + 1) for _ in range(capacity_w + 1)]
 
-  # Create a 2d matrix to store the maximum price
   for i in range(elements):
     for w in range(capacity_w, weight[i] - 1, -1):
       for v in range(capacity_v, volume[i] - 1, -1):
@@ -26,4 +27,4 @@ if __name__ == "__main__":
   capacity_v = 10
 
   result = DPMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v)
-  print("Best result:", result)
+  print("Best price:", result)
