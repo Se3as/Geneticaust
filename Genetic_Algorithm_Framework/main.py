@@ -4,7 +4,7 @@ from Common import GAParams, GAConstants
 from Problem import PartitionProblem  
 from Controller import Controller
 
-def generate_medium_case_list(n: int, max_value: int = 100) -> List[int]:
+def generate_medium_case_numbers(n: int, max_value: int = 100) -> List[int]:
     medium_list: List[int] = [random.randint(1, max_value) for _ in range(n)]  
     if sum(medium_list) % 2 != 0:
         medium_list[-1] += 1
