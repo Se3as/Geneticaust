@@ -35,7 +35,7 @@ class ExhRecMultiKnapsack:
 
         best_value = max(skip_value, take_in_first, take_in_second)
         return best_value
-
+'''
 if __name__ == "__main__":
   # items to be placed in the knapsacks
   items = [1, 2, 3, 4, 5]
@@ -53,3 +53,4 @@ if __name__ == "__main__":
   best_price = Knapsack.run(items, weight, price, capacity1, capacity2)
   
   print("Total best price:", best_price)
+'''

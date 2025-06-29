@@ -42,7 +42,7 @@ class DPTopDownMultiKnapsack:
 
         # Return the maximum value obtained from all cases
         return memo[capacity1][capacity2]
-
+'''
 if __name__ == "__main__":
   # items to be placed in the knapsacks
   items = [1, 2, 3, 4, 5]
@@ -59,4 +59,4 @@ if __name__ == "__main__":
   Knapsack = DPTopDownMultiKnapsack()
   best_price = Knapsack.run(items, weight, price, capacity1, capacity2)
   print("Total best price:", best_price)
-
+'''
