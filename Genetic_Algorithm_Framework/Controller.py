@@ -18,14 +18,16 @@ class Controller:
         problem, 
         problem_args: Dict, 
         log_file: str,
-        params: 'GAParams' = None 
+        params: 'GAParams' = None,
+        extra_info: Dict = None
     ):
 
         experiment = {
             "problem": problem,
             "problem_args": problem_args,
             "log_file": log_file,
-            "params": params 
+            "params": params,
+            "extra_info": extra_info or {}
         }
         self._experiments.append(experiment)
 
@@ -33,18 +35,11 @@ class Controller:
         problem = experiment["problem"]
         problem_args = experiment["problem_args"]
         active_params = experiment["params"] or self.default_params
-        problem_kwargs = {}
-        extra_info = {}
-        extra_cols = ['Optimal', 'Size'] 
-        for key, value in problem_args.items():
-            if key in extra_cols:
-                extra_info[key] = value
-            else:
-                problem_kwargs[key] = value
+        extra_info = experiment["extra_info"]
 
         for run in range(1, self.reps + 1):
             
-            problem_instance = problem(**problem_kwargs)
+            problem_instance = problem(**problem_args)
             
             algorithm = GeneticAlgorithm(problem=problem_instance, params=active_params)
             
@@ -52,14 +47,14 @@ class Controller:
             best_solution = algorithm.run()
             end_time = time.perf_counter()
             
-            execution_time = (end_time - start_time) * 1000
+            time_ms = (end_time - start_time) * 1000
 
             # problem_instance.print_solution(best_solution.chromosome)
             
             logger.log_result(
                 algorithm, 
                 run, 
-                execution_time, 
+                time_ms, 
                 extra_info
             )
 

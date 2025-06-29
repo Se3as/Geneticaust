@@ -35,10 +35,13 @@ if __name__ == "__main__":
         if sum(numbers_run) % 2 == 0:
             controller.add_experiment(
                 PartitionProblem,
-                problem_args={
-                    'numbers': numbers_run.copy(),
-                    'Size': len(numbers_run) 
+                problem_args = {
+                    'numbers': numbers_run.copy()
                 },
-                log_file="Partition_GA.csv"
+                log_file="Partition_GA.csv",
+                params=ga_common_params,
+                extra_info = { 
+                    'Size': len(numbers_run),
+                }
             )
     controller.run() 

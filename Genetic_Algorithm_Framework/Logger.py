@@ -9,7 +9,9 @@ class Logger:
     def __init__(self, filename: str):
 
         self.filename = filename
-        self._results: List[Dict[str, Any]] = []
+        self.file = open(self.filename, 'w', newline='', encoding='utf-8')
+        self.writer = None
+        self.header_written = False
 
     def get_base_header(self) -> List[str]:
         return [
@@ -52,22 +54,16 @@ class Logger:
         data.update(metrics)
         if extra_cols:
             data.update(extra_cols)
-        self._results.append(data)
+        if not self.header_written:
+            base = self.get_base_header()
+            extras = sorted(set(data.keys()) - set(base))
+            header = base + extras
+
+            self.writer = csv.DictWriter(self.file, fieldnames=header, restval="")
+            self.writer.writeheader()
+            self.header_written = True
+        self.writer.writerow(data)
+        self.file.flush()
 
     def close(self):
-        base_header = self.get_base_header()
-        base_header_set = set(base_header)
-        all_keys = set()
-        for result_dict in self._results:
-            all_keys.update(result_dict.keys())
-        extra_keys = all_keys - base_header_set
-        sorted_extra_keys = sorted(list(extra_keys))
-        final_header = base_header + sorted_extra_keys
-        try:
-            with open(self.filename, 'w', newline='', encoding='utf-8') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=final_header, restval="")
-                writer.writeheader()
-                writer.writerows(self._results)
-
-        except IOError as e:
-            print(f"Error al escribir en el archivo '{self.filename}': {e}")
+        self.file.close()
