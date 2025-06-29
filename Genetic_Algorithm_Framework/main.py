@@ -2,8 +2,10 @@ from typing import List
 import random
 from Common import GAParams, GAConstants  
 from Problem import PartitionProblem  
+from Problem import MultiKnapsackProblem
 from Controller import Controller
 
+'''
 def generate_medium_case_numbers(n: int, max_value: int = 100) -> List[int]:
     medium_list: List[int] = [random.randint(1, max_value) for _ in range(n)]  
     if sum(medium_list) % 2 != 0:
@@ -42,3 +44,41 @@ if __name__ == "__main__":
                 log_file="Partition_GA.csv"
             )
     controller.run() 
+'''
+
+if __name__ == "__main__":
+    items = list(range(1, 26))
+    weight = [random.randint(1, 20) for _ in items]
+    price = [random.randint(10, 100) for _ in items]
+    cap1 = 100
+    cap2 = 100
+
+    ga_common_params = GAParams(
+        pop_size=150, 
+        init_method=GAConstants.RANDOM_INIT,
+        selection_method=GAConstants.TOURNAMENT_SELECTION, 
+        tournament_size=5,
+        crossover_prob=0.9, 
+        mutation_prob=0.1, 
+        max_generations=120, 
+        patience=25
+    )
+    reps = 5
+    controller = Controller(
+        ga_common_params,
+        reps
+    )
+
+    # This part changed
+    controller.add_experiment(
+        MultiKnapsackProblem,
+        problem_args={
+            'items': items,
+            'weight': weight,
+            'price': price,
+            'capacity1': cap1,
+            'capacity2': cap2
+        },
+        log_file="MultiKnapsack_GA.csv"
+    )
+    controller.run()

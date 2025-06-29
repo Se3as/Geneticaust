@@ -1,0 +1,6 @@
+Rep_num,Time,Stop_Reason,Generation,Population,Init_Method,Selection_Method,Tournament_Size,Crossover_Rate,Crossover_Type,Mutation_Rate,Mutation_Type,elitism,Max_Gen,Patience,Knapsack1_Weight,Knapsack2_Weight,Total_Value,Valid
+1,29.6112,Patience,35,150,Random,Tournament,5,0.9,Uniform,0.1,Bit-Flip,0.1,120,25,100,97,1362,True
+2,31.2056,Patience,38,150,Random,Tournament,5,0.9,Uniform,0.1,Bit-Flip,0.1,120,25,99,95,1366,True
+3,29.4106,Patience,37,150,Random,Tournament,5,0.9,Uniform,0.1,Bit-Flip,0.1,120,25,98,100,1381,True
+4,26.3462,Patience,31,150,Random,Tournament,5,0.9,Uniform,0.1,Bit-Flip,0.1,120,25,99,99,1338,True
+5,28.6796,Patience,35,150,Random,Tournament,5,0.9,Uniform,0.1,Bit-Flip,0.1,120,25,99,97,1378,True
