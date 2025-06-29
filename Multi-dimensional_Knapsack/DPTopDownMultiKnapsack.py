@@ -1,39 +1,47 @@
-# This implementation is top-down dp
-def findExhaustiveRec(current, items, elements,
-                      weight, volume, price, capacity_w, capacity_v, dp):
+# Implementation of top-down dp
 
-  # Base case: no more items to consider
-  if current == elements:
-    return 0 
-  
-  if dp[capacity_w][capacity_v] != 0:
-    return dp[capacity_w][capacity_v]
+class DPTopDownMultiKnapsack:
+    def run(self, items, weight, price, capacity1, capacity2):
+        return self.DPTopDownMultiKnapsack(items, weight, price, capacity1, capacity2)
 
-  # Case 1: skip the current item
-  skipResult = findExhaustiveRec(current + 1, items, elements,
-                              weight, volume, price, capacity_w, capacity_v, dp)
+    def DPTopDownMultiKnapsack(self, items, weight, price, capacity1, capacity2):
+        elements = len(items)
+        current = 0  # start from the first items
+        memo = [[-1 for _ in range(capacity2 + 1)] for _ in range(capacity1 + 1)]
+        return self.findTopDown(current, items, elements, weight, price,
+                                    capacity1, capacity2, memo)
 
-  # Case 2: include the current item in the first knapsack if it fits
-  takeInFirst = 0
-  if weight[current] <= capacity_w and volume[current] <= capacity_v:
-    takeInFirst = price[current] + findExhaustiveRec(
-        current + 1, items, elements, weight, volume, price,
-        capacity_w - weight[current], capacity_v - volume[current], dp)
+    def findTopDown(self, current, items, elements,
+                  weight, price, capacity1, capacity2, memo):
+        # Base case: if all items have been considered
+        if current == elements:
+            return 0
+        
+        if memo[capacity1][capacity2] != -1:
+            return memo[capacity1][capacity2]
+    
+        # Case 1: skip the current item
+        skip_value = self.findTopDown(current + 1, items, elements,
+                                    weight, price, capacity1, capacity2, memo)
 
-  # Store the result in the dp table
-  dp[capacity_w][capacity_v] = max(skipResult, takeInFirst)
+        # Case 2: include the current item in the first knapsack if it fits
+        take_in_first = 0
+        if weight[current] <= capacity1:
+            take_in_first = price[current] + self.findTopDown(
+                current + 1, items, elements, weight, price,
+                capacity1 - weight[current], capacity2, memo)
 
-  # Return the maximum value obtained from all cases
-  return dp[capacity_w][capacity_v]
+        # Case 3: include the current item in the second knapsack if it fits
+        take_in_second = 0
+        if weight[current] <= capacity2:
+            take_in_second = price[current] + self.findTopDown(
+                current + 1, items, elements, weight, price,
+                capacity1, capacity2 - weight[current], memo)
 
-def ExhRecMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v):
-  elements = len(items)
-  current = 0  # start from the first item
-  dp = [[0] * (capacity_v + 1) for _ in range(capacity_w + 1)]
-  best_result = findExhaustiveRec(current, items, elements, 
-                                  weight, volume, price,
-                                  capacity_w, capacity_v, dp)
-  return best_result
+        memo[capacity1][capacity2] = max(skip_value, take_in_first, take_in_second)
+
+        # Return the maximum value obtained from all cases
+        return memo[capacity1][capacity2]
 
 if __name__ == "__main__":
   # items to be placed in the knapsacks
@@ -41,13 +49,14 @@ if __name__ == "__main__":
   # restrictions
   # weight of items
   weight = [5, 2, 6, 10, 7]
-  # volume of items
-  volume = [3, 1, 5, 7, 6]
+  # capacities of knapsacks
+  capacity1 = 10
+  capacity2 = 15
+
   # price of items
   price = [20, 10, 30, 50, 40]
-  # capacities
-  capacity_w = 10
-  capacity_v = 10
 
-  result = ExhRecMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v)
-  print("Best price:", result)
+  Knapsack = DPTopDownMultiKnapsack()
+  best_price = Knapsack.run(items, weight, price, capacity1, capacity2)
+  print("Total best price:", best_price)
+

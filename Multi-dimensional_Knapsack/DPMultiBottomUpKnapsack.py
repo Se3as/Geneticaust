@@ -1,30 +1,42 @@
-# This implementation is bottom-up dp
-def DPMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v):
-  elements = len(items)
-  # Create a 2d matrix to store the maximum price and initialize it to 0
-  # dp[w][v] will hold the maximum price for weight w and volume v
-  dp = [[0] * (capacity_v + 1) for _ in range(capacity_w + 1)]
+# Implementation of bottom-up dp
 
-  for i in range(elements):
-    for w in range(capacity_w, weight[i] - 1, -1):
-      for v in range(capacity_v, volume[i] - 1, -1):
-        if w >= weight[i] and v >= volume[i]:
-          dp[w][v] = max(dp[w][v], dp[w - weight[i]][v - volume[i]] + price[i])
-  return dp[capacity_w][capacity_v]
+class DPBottomUpKnapsack:
+    
+    def run(self, items, weight, price, capacity1, capacity2):
+        return self.DPMultiKnapsack(items, weight, price, capacity1, capacity2)
+
+    def DPMultiKnapsack(self, items, weight, price, capacity1, capacity2):
+        elements = len(items)
+        # dp[i][w1][w2]: máximo valor usando los primeros i ítems con capacidades w1 y w2
+        dp = [[[0 for _ in range(capacity2 + 1)] for _ in range(capacity1 + 1)] for _ in range(elements + 1)]
+
+        for i in range(1, elements + 1):
+            wi = weight[i - 1]
+            pi = price[i - 1]
+            for w1 in range(capacity1 + 1):
+                for w2 in range(capacity2 + 1):
+                    # No meter el ítem
+                    dp[i][w1][w2] = dp[i - 1][w1][w2]
+                    # Meter en mochila 1 si cabe
+                    if w1 >= wi:
+                        dp[i][w1][w2] = max(dp[i][w1][w2], dp[i - 1][w1 - wi][w2] + pi)
+                    # Meter en mochila 2 si cabe
+                    if w2 >= wi:
+                        dp[i][w1][w2] = max(dp[i][w1][w2], dp[i - 1][w1][w2 - wi] + pi)
+        return dp[elements][capacity1][capacity2]
 
 if __name__ == "__main__":
-  # items to be placed in the knapsacks
-  items = [1, 2, 3, 4, 5]
-  # restrictions
-  # weight of items
-  weight = [5, 2, 6, 10, 7]
-  # volume of items
-  volume = [3, 1, 5, 7, 6]
-  # price of items
-  price = [20, 10, 30, 50, 40]
-  # capacities
-  capacity_w = 10
-  capacity_v = 10
+    # items to be placed in the knapsacks
+    items = [1, 2, 3, 4, 5]
+    # restrictions
+    # weight of items
+    weight = [5, 2, 6, 10, 7]
+    # capacities
+    capacity1= 10
+    capacity2 = 15
+    # price of items
+    price = [20, 10, 30, 50, 40]
 
-  result = DPMultiKnapsack(items, weight, volume, price, capacity_w, capacity_v)
-  print("Best price:", result)
+    Knapsack = DPBottomUpKnapsack()
+    result = Knapsack.DPMultiKnapsack(items, weight, price, capacity1, capacity2)
+    print("Best price:", result)
