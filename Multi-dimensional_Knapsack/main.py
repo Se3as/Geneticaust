@@ -30,8 +30,8 @@ def run_test(method_test: Any, name: str, items: List[int], weight: List[int], p
 
 def main():
     random.seed(777)
-    N_ELEMENTS_WORST = 16
-    N_ELEMENTS_MEDIUM = 25
+    N_ELEMENTS_WORST = 20
+    N_ELEMENTS_MEDIUM = 50
     CAPACITY_1 = 50
     CAPACITY_2 = 50
 
