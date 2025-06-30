@@ -102,23 +102,22 @@ class GeneticAlgorithm:
         return self.CrossoverResult(child1, child2)
 
     def mutate(self, chromo: List[int]):
-        if random.random() > self.params.mutation_prob:
-            return
         mutation_type: str = self.params.mutation_type
         if mutation_type == GAConstants.BIT_FLIP_MUTATION:
-            self.mutate_bit_flip(chromo)
+            self.mutate_bit_flip(chromo, self.params.mutation_prob) 
         elif mutation_type == GAConstants.SWAP_MUTATION:
-            self.mutate_swap(chromo)
+            self.mutate_swap(chromo, self.params.mutation_prob)
 
-    def mutate_bit_flip(self, chromo: List[int]):
+    def mutate_bit_flip(self, chromo: List[int], mutation_prob: float):
         for i in range(len(chromo)):
-            if random.random() < self.params.gene_mutation_prob:
+            if random.random() < mutation_prob: 
                 chromo[i] = 1 - chromo[i]
     
-    def mutate_swap(self, chromo: List[int]):
-        pos1: int = random.randint(0, len(chromo) - 1)
-        pos2: int = random.randint(0, len(chromo) - 1)
-        chromo[pos1], chromo[pos2] = chromo[pos2], chromo[pos1]
+    def mutate_swap(self, chromo: List[int], mutation_prob: float):
+        if random.random() < mutation_prob:
+            pos1: int = random.randint(0, len(chromo) - 1)
+            pos2: int = random.randint(0, len(chromo) - 1)
+            chromo[pos1], chromo[pos2] = chromo[pos2], chromo[pos1]
 
     def run(self) -> 'Individual':
         self.initialize_population()

@@ -49,7 +49,6 @@ class Controller:
             
             time_ms = (end_time - start_time) * 1000
 
-            # problem_instance.print_solution(best_solution.chromosome)
             
             logger.log_result(
                 algorithm, 
