@@ -1,0 +1,7 @@
+problem,time,count,sum
+PartitionExhaustive_WorstCase,5663.425383012509,26,80
+PartitionDP_TopDown_WorstCase,0.13388600200414658,26,80
+PartitionDP_BottomUp_WorstCase,0.028505019145086408,26,80
+PartitionExhaustive_MediumCase,5.570843000896275,26,13366
+PartitionDP_TopDown_MediumCase,37.783540989039466,26,13366
+PartitionDP_BottomUp_MediumCase,1.6110980068333447,26,13366
